@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kata Nama dalam Bahasa Melayu — แบบฝึกหัดโต้ตอบ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF6E9;
+    --cream-2:#FFEFDA;
+    --forest:#2F5233;
+    --forest-soft:#4B7355;
+    --sage:#A8CBA0;
+    --sage-light:#DCEEDD;
+    --coral:#FF8B66;
+    --coral-dark:#E8703F;
+    --honey:#F4B740;
+    --rose-bg:#FFE3E0;
+    --rose-text:#C4453B;
+    --mint-bg:#DFF5E1;
+    --mint-text:#1F7A3D;
+    --ink:#3A342B;
+    --paper:#FFFDF8;
+    --shadow: 0 12px 30px rgba(90,70,40,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    font-family:'Sarabun',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 12%, var(--sage-light) 0%, transparent 40%),
+      radial-gradient(circle at 92% 8%, #FFE0C7 0%, transparent 38%),
+      radial-gradient(circle at 85% 90%, var(--sage-light) 0%, transparent 42%),
+      radial-gradient(circle at 5% 88%, #FFE9CE 0%, transparent 40%),
+      var(--cream);
+    display:flex;
+    justify-content:center;
+    padding: 28px 16px 60px;
+  }
+  .stage{
+    width:100%;
+    max-width:920px;
+  }
+  .app-card{
+    background:var(--paper);
+    border-radius:32px;
+    box-shadow:var(--shadow);
+    border:2px solid #F1E4CC;
+    overflow:hidden;
+    position:relative;
+  }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 22px;
+    background:linear-gradient(135deg, var(--forest) 0%, var(--forest-soft) 100%);
+    color:#fff;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Mali',cursive;
+    font-weight:700;
+    font-size:1.05rem;
+  }
+  .brand svg{width:26px;height:26px;flex:none;}
+  .home-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(255,255,255,0.16);
+    border:none;
+    color:#fff;
+    font-family:'Sarabun',sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .home-btn:hover{background:rgba(255,255,255,0.3);}
+  .home-btn:focus-visible, button:focus-visible, .toc-card:focus-visible{outline:3px solid var(--coral); outline-offset:2px;}
+
+  .progress-track{
+    height:6px;
+    background:#F1E4CC;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--honey), var(--coral));
+    width:0%;
+    transition:width .4s ease;
+  }
+
+  .screen{
+    display:none;
+    padding: 34px 34px 40px;
+    animation: fadeIn .35s ease;
+  }
+  .screen.active{display:block;}
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- COVER ---------- */
+  #screen-cover{padding:0;}
+  .cover-wrap{
+    padding:56px 30px 40px;
+    text-align:center;
+    position:relative;
+    background:
+      radial-gradient(circle at 15% 20%, #FFE7CC 0%, transparent 35%),
+      radial-gradient(circle at 85% 15%, var(--sage-light) 0%, transparent 35%);
+  }
+  .cover-doodles{
+    display:flex; justify-content:center; gap:22px; margin-bottom:6px;
+  }
+  .cover-doodles svg{width:46px;height:46px;}
+  .cover-title{
+    font-family:'Mali',cursive;
+    font-weight:800;
+    font-size:2.5rem;
+    color:var(--forest);
+    margin:10px 0 0;
+    letter-spacing:0.5px;
+  }
+  .cover-sub{
+    font-family:'Mali',cursive;
+    font-weight:700;
+    font-size:1.5rem;
+    color:var(--coral-dark);
+    margin:4px 0 14px;
+  }
+  .cover-thai{
+    font-size:1.15rem;
+    font-weight:600;
+    color:var(--forest-soft);
+    margin-bottom:6px;
+  }
+  .cover-tag{
+    font-size:0.95rem;
+    color:#8a7f6b;
+    font-style:italic;
+    margin-bottom:26px;
+  }
+  .cover-start{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color:#fff;
+    font-family:'Mali',cursive;
+    font-weight:700;
+    font-size:1.05rem;
+    padding:14px 30px;
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 10px 22px rgba(232,112,63,0.35);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cover-start:hover{transform:translateY(-2px); box-shadow:0 14px 26px rgba(232,112,63,0.42);}
+  .cover-meta{
+    margin:34px auto 0;
+    max-width:420px;
+    background:var(--sage-light);
+    border-radius:20px;
+    padding:20px 24px;
+    text-align:left;
+    font-size:0.92rem;
+    line-height:2;
+    color:var(--forest);
+  }
+  .cover-meta b{color:var(--forest);}
+  .cover-meta .dots{color:#9db79a;}
+
+  /* ---------- TOC ---------- */
+  .toc-title{
+    font-family:'Mali',cursive;
+    font-weight:800;
+    font-size:1.9rem;
+    color:var(--forest);
+    margin:0 0 4px;
+    text-align:center;
+  }
+  .toc-hint{
+    text-align:center;
+    color:#8a7f6b;
+    font-size:0.92rem;
+    margin-bottom:26px;
+  }
+  .toc-path{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .toc-card{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    background:var(--paper);
+    border:2px solid #F1E4CC;
+    border-radius:20px;
+    padding:14px 18px;
+    margin-bottom:18px;
+    cursor:pointer;
+    text-align:left;
+    width:100%;
+    font-family:'Sarabun',sans-serif;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .toc-card:hover{transform:translateY(-2px); box-shadow:0 10px 20px rgba(90,70,40,0.1); border-color:var(--sage);}
+  .toc-card::after{
+    content:"";
+    position:absolute;
+    left:38px;
+    bottom:-19px;
+    width:2px;
+    height:18px;
+    background:repeating-linear-gradient(to bottom, #D9CBAE 0, #D9CBAE 4px, transparent 4px, transparent 8px);
+  }
+  .toc-card:last-child::after{display:none;}
+  .toc-icon{
+    flex:none;
+    width:52px;height:52px;
+    border-radius:16px;
+    background:var(--sage-light);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .toc-icon svg{width:28px;height:28px;}
+  .toc-text{flex:1;}
+  .toc-label{
+    font-size:0.78rem;
+    color:var(--coral-dark);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  .toc-name{
+    font-family:'Mali',cursive;
+    font-weight:700;
+    font-size:1.12rem;
+    color:var(--forest);
+  }
+  .toc-check{
+    flex:none;
+    width:30px;height:30px;
+    border-radius:50%;
+    border:2.5px solid #D9CBAE;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .2s ease;
+    background:#fff;
+  }
+  .toc-check.done{
+    background:var(--mint-text);
+    border-color:var(--mint-text);
+  }
+  .toc-check svg{width:16px;height:16px;opacity:0;transition:opacity .2s ease;}
+  .toc-check.done svg{opacity:1;}
+
+  /* ---------- CONTENT PAGES ---------- */
+  .page-header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .page-header .badge{
+    flex:none;
+    width:44px;height:44px;
+    border-radius:14px;
+    background:var(--coral);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Mali',cursive;
+    font-weight:800;
+    font-size:1.15rem;
+  }
+  .page-header h2{
+    font-family:'Mali',cursive;
+    font-weight:800;
+    font-size:1.5rem;
+    color:var(--forest);
+    margin:0;
+  }
+  .content-body p{line-height:1.85; font-size:1rem; margin:0 0 14px;}
+  .content-body h4{
+    font-family:'Mali',cursive;
+    color:var(--coral-dark);
+    font-size:1.05rem;
+    margin:20px 0 10px;
+  }
+  .word-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:10px;
+    margin:12px 0 18px;
+  }
+  .word-chip{
+    background:var(--sage-light);
+    border-radius:14px;
+    padding:10px 14px;
+    font-size:0.95rem;
+    color:var(--forest);
+  }
+  .word-chip b{color:var(--forest); font-weight:700;}
+  .example-box{
+    background:var(--cream-2);
+    border-left:4px solid var(--honey);
+    border-radius:12px;
+    padding:14px 18px;
+    margin:14px 0;
+    font-size:0.95rem;
+  }
+  .tip-box{
+    background:var(--mint-bg);
+    border-radius:14px;
+    padding:14px 18px;
+    margin:18px 0 6px;
+    font-size:0.95rem;
+    color:var(--mint-text);
+    font-weight:600;
+  }
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:28px;
+    gap:10px;
+  }
+  .nav-btn{
+    font-family:'Mali',cursive;
+    font-weight:700;
+    font-size:0.98rem;
+    padding:11px 22px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    display:flex;align-items:center;gap:8px;
+    transition:transform .15s ease;
+  }
+  .nav-btn:hover{transform:translateY(-2px);}
+  .nav-btn.primary{background:linear-gradient(135deg, var(--coral), var(--coral-dark)); color:#fff; box-shadow:0 8px 18px rgba(232,112,63,.3);}
+  .nav-btn.ghost{background:var(--sage-light); color:var(--forest);}
+
+  /* ---------- ACTIVITY PAGES ---------- */
+  .activity-intro{
+    background:var(--sage-light);
+    border-radius:16px;
+    padding:14px 18px;
+    font-size:0.92rem;
+    color:var(--forest);
+    margin-bottom:22px;
+  }
+  .q-card{
+    background:var(--paper);
+    border:2px solid #F1E4CC;
+    border-radius:18px;
+    padding:16px 18px;
+    margin-bottom:16px;
+  }
+  .q-top{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-bottom:12px;
+  }
+  .q-num{
+    flex:none;
+    width:28px;height:28px;
+    border-radius:50%;
+    background:var(--forest);
+    color:#fff;
+    font-size:0.82rem;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Mali',cursive;
+  }
+  .q-text{font-weight:600; font-size:0.98rem; padding-top:2px;}
+  .opt-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .opt-btn{
+    text-align:left;
+    background:#FBF6EA;
+    border:2px solid #EEE1C6;
+    border-radius:12px;
+    padding:9px 12px;
+    font-family:'Sarabun',sans-serif;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .opt-btn:hover{border-color:var(--sage);}
+  .opt-btn.chosen-correct{background:var(--mint-bg); border-color:var(--mint-text); color:var(--mint-text); font-weight:700;}
+  .opt-btn.chosen-wrong{background:var(--rose-bg); border-color:var(--rose-text); color:var(--rose-text); font-weight:700;}
+  .opt-btn.reveal-correct{border-color:var(--mint-text); box-shadow:inset 0 0 0 1.5px var(--mint-text);}
+  .fb-panel{
+    margin-top:12px;
+    border-radius:12px;
+    padding:11px 14px;
+    font-size:0.88rem;
+    line-height:1.6;
+    display:none;
+  }
+  .fb-panel.show{display:block; animation:fadeIn .25s ease;}
+  .fb-panel.ok{background:var(--mint-bg); color:var(--mint-text);}
+  .fb-panel.no{background:var(--rose-bg); color:var(--rose-text);}
+  .fb-panel b{display:block; margin-bottom:2px;}
+
+  .sentence-line{
+    font-size:1.02rem;
+    font-weight:600;
+    margin-bottom:12px;
+    color:var(--forest);
+  }
+  .blank{
+    display:inline-block;
+    min-width:90px;
+    border-bottom:2.5px dashed var(--coral);
+    text-align:center;
+    color:var(--coral-dark);
+    font-weight:700;
+    padding:0 4px;
+  }
+  .chip-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip-btn{
+    background:#FBF6EA;
+    border:2px solid #EEE1C6;
+    border-radius:999px;
+    padding:8px 16px;
+    font-family:'Sarabun',sans-serif;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip-btn:hover{border-color:var(--sage);}
+  .chip-btn.chosen-correct{background:var(--mint-bg); border-color:var(--mint-text); color:var(--mint-text); font-weight:700;}
+  .chip-btn.chosen-wrong{background:var(--rose-bg); border-color:var(--rose-text); color:var(--rose-text); font-weight:700;}
+
+  .score-bar{
+    position:sticky;
+    bottom:0;
+    margin-top:24px;
+    background:var(--forest);
+    color:#fff;
+    border-radius:18px;
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 -6px 18px rgba(0,0,0,0.12);
+  }
+  .score-bar .label{font-family:'Mali',cursive; font-weight:700; font-size:0.98rem;}
+  .score-bar .count{font-family:'Mali',cursive; font-weight:800; font-size:1.2rem; color:var(--honey);}
+  .celebrate{
+    display:none;
+    text-align:center;
+    background:linear-gradient(135deg,#FFE7CC,#DFF5E1);
+    border-radius:16px;
+    padding:14px;
+    margin-top:14px;
+    font-family:'Mali',cursive;
+    font-weight:700;
+    color:var(--forest);
+  }
+  .celebrate.show{display:block; animation:fadeIn .4s ease;}
+
+  /* ---------- FINISH ---------- */
+  .finish-wrap{text-align:center; padding:20px 10px;}
+  .finish-wrap svg{width:70px;height:70px;margin-bottom:10px;}
+  .finish-wrap h2{font-family:'Mali',cursive; color:var(--forest); font-size:1.6rem; margin:6px 0;}
+  .finish-wrap p{color:#8a7f6b; margin-bottom:22px;}
+
+  @media (max-width:560px){
+    .screen{padding:24px 18px 30px;}
+    .cover-title{font-size:1.9rem;}
+    .cover-sub{font-size:1.15rem;}
+    .opt-grid{grid-template-columns:1fr;}
+    .toc-card{padding:12px 14px;}
+    .toc-icon{width:44px;height:44px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="app-card">
+
+    <div class="topbar" id="topbar" style="display:none;">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>Kata Nama · คำนามในภาษามลายู</span>
+      </div>
+      <button class="home-btn" onclick="goTo('toc')" aria-label="กลับไปหน้าสารบัญ">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v8.5a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1V10" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        สารบัญ
+      </button>
+    </div>
+    <div class="progress-track" id="progressTrack" style="display:none;"><div class="progress-fill" id="progressFill"></div></div>
+
+    <!-- COVER -->
+    <section class="screen active" id="screen-cover">
+      <div class="cover-wrap">
+        <div class="cover-doodles">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#DFF5E1"/><path d="M8 13.5c.7 1 1.9 1.6 4 1.6s3.3-.6 4-1.6" stroke="#2F5233" stroke-width="1.4" stroke-linecap="round"/><circle cx="9" cy="10" r="1.1" fill="#2F5233"/><circle cx="15" cy="10" r="1.1" fill="#2F5233"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="2" fill="#FFE0C7"/><path d="M4 8h16M9 5v14" stroke="#E8703F" stroke-width="1.3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#FFE9CE"/><path d="M12 7v5l3 2" stroke="#E8703F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="cover-title">KATA NAMA</div>
+        <div class="cover-sub">dalam Bahasa Melayu</div>
+        <div class="cover-thai">คำนามในภาษามลายู</div>
+        <div class="cover-tag">เรียนรู้คำศัพท์ เข้าใจหลักการ ใช้คำนามได้ถูกต้อง</div>
+        <button class="cover-start" onclick="goTo('toc')">
+          เริ่มเรียนรู้เลย
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="cover-meta">
+          <div><b>จัดทำโดย:</b> <span class="dots">........................................................</span></div>
+          <div><b>สาขา:</b> การสอนภาษามลายู</div>
+          <div><b>รายวิชา:</b> <span class="dots">........................................................</span></div>
+          <div><b>อาจารย์ผู้สอน:</b> <span class="dots">....................................................</span></div>
+          <div><b>ปีการศึกษา:</b> 2569</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOC -->
+    <section class="screen" id="screen-toc">
+      <div class="toc-title">สารบัญ</div>
+      <div class="toc-hint">แตะหัวข้อที่ต้องการศึกษาได้เลย — เครื่องหมายถูกจะขึ้นเองเมื่อคุณเข้าไปดูแล้ว</div>
+      <div class="toc-path" id="tocPath"></div>
+    </section>
+
+    <!-- TOPIC 1 -->
+    <section class="screen" id="screen-topic1">
+      <div class="page-header"><div class="badge">1</div><h2>ความหมายของคำนาม (Kata Nama)</h2></div>
+      <div class="content-body">
+        <p>Kata Nama หมายถึง คำที่ใช้เรียกชื่อคน สัตว์ สิ่งของ สถานที่ หรือสิ่งที่เป็นนามธรรม</p>
+        <h4>ตัวอย่าง</h4>
+        <div class="word-grid">
+          <div class="word-chip"><b>orang</b> = คน</div>
+          <div class="word-chip"><b>guru</b> = ครู</div>
+          <div class="word-chip"><b>murid</b> = นักเรียน</div>
+          <div class="word-chip"><b>kucing</b> = แมว</div>
+          <div class="word-chip"><b>buku</b> = หนังสือ</div>
+          <div class="word-chip"><b>sekolah</b> = โรงเรียน</div>
+          <div class="word-chip"><b>masjid</b> = มัสยิด</div>
+          <div class="word-chip"><b>kebahagiaan</b> = ความสุข</div>
+        </div>
+        <div class="tip-box">💡 จำง่าย ๆ: Kata Nama = คำที่ใช้ “เรียกชื่อ” สิ่งต่าง ๆ</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('topic2')">หัวข้อถัดไป →</button>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section class="screen" id="screen-topic2">
+      <div class="page-header"><div class="badge">2</div><h2>ประเภทของคำนาม</h2></div>
+      <div class="content-body">
+        <p>คำนามในภาษามลายูแบ่งออกได้หลายประเภทตามลักษณะการใช้งาน โดยหลัก ๆ มีดังนี้</p>
+        <div class="word-grid">
+          <div class="word-chip"><b>Kata Nama Am</b> — คำนามทั่วไป</div>
+          <div class="word-chip"><b>Kata Nama Khas</b> — คำนามเฉพาะ</div>
+          <div class="word-chip"><b>Kata Nama Konkret</b> — คำนามรูปธรรม</div>
+          <div class="word-chip"><b>Kata Nama Abstrak</b> — คำนามนามธรรม</div>
+        </div>
+        <div class="tip-box">💡 รายละเอียดของแต่ละประเภทจะกล่าวถึงในหัวข้อถัดไป</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('topic3')">หัวข้อถัดไป →</button>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section class="screen" id="screen-topic3">
+      <div class="page-header"><div class="badge">3</div><h2>คำนามทั่วไปและคำนามเฉพาะ</h2></div>
+      <div class="content-body">
+        <h4>A. Kata Nama Am — คำนามทั่วไป</h4>
+        <p>ใช้เรียกชื่อบุคคล สัตว์ สิ่งของ หรือสถานที่โดยทั่วไป</p>
+        <div class="word-grid">
+          <div class="word-chip"><b>guru</b> = ครู</div>
+          <div class="word-chip"><b>murid</b> = นักเรียน</div>
+          <div class="word-chip"><b>sekolah</b> = โรงเรียน</div>
+          <div class="word-chip"><b>buku</b> = หนังสือ</div>
+          <div class="word-chip"><b>kucing</b> = แมว</div>
+          <div class="word-chip"><b>kereta</b> = รถยนต์</div>
+        </div>
+        <div class="example-box">✏️ Guru mengajar murid di dalam kelas. <i>(ครูกำลังสอนนักเรียนในห้องเรียน)</i></div>
+        <h4>B. Kata Nama Khas — คำนามเฉพาะ</h4>
+        <p>ใช้เรียกชื่อเฉพาะของบุคคล สถานที่ องค์กร หรือสิ่งต่าง ๆ มักขึ้นต้นด้วยตัวพิมพ์ใหญ่</p>
+        <div class="word-grid">
+          <div class="word-chip"><b>Ahmad</b> = อาหมัด</div>
+          <div class="word-chip"><b>Fatimah</b> = ฟาตีมะห์</div>
+          <div class="word-chip"><b>Malaysia</b> = ประเทศมาเลเซีย</div>
+          <div class="word-chip"><b>Thailand</b> = ประเทศไทย</div>
+          <div class="word-chip"><b>Yala</b> = ยะลา</div>
+          <div class="word-chip"><b>Universiti Rajabhat Yala</b> = ม.ราชภัฏยะลา</div>
+        </div>
+        <div class="example-box">✏️ Ahmad pergi ke Yala. <i>(อาหมัดไปยะลา)</i></div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('topic4')">หัวข้อถัดไป →</button>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section class="screen" id="screen-topic4">
+      <div class="page-header"><div class="badge">4</div><h2>คำนามรูปธรรมและนามธรรม</h2></div>
+      <div class="content-body">
+        <h4>Kata Nama Konkret — คำนามรูปธรรม</h4>
+        <p>สิ่งที่สามารถมองเห็นหรือสัมผัสได้</p>
+        <div class="word-grid">
+          <div class="word-chip"><b>meja</b> = โต๊ะ</div>
+          <div class="word-chip"><b>kerusi</b> = เก้าอี้</div>
+          <div class="word-chip"><b>buku</b> = หนังสือ</div>
+          <div class="word-chip"><b>rumah</b> = บ้าน</div>
+          <div class="word-chip"><b>telefon</b> = โทรศัพท์</div>
+        </div>
+        <h4>Kata Nama Abstrak — คำนามนามธรรม</h4>
+        <p>สิ่งที่ไม่สามารถจับต้องได้</p>
+        <div class="word-grid">
+          <div class="word-chip"><b>kasih sayang</b> = ความรัก</div>
+          <div class="word-chip"><b>kebahagiaan</b> = ความสุข</div>
+          <div class="word-chip"><b>keberanian</b> = ความกล้าหาญ</div>
+          <div class="word-chip"><b>kecantikan</b> = ความสวยงาม</div>
+          <div class="word-chip"><b>kesabaran</b> = ความอดทน</div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('topic5')">หัวข้อถัดไป →</button>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section class="screen" id="screen-topic5">
+      <div class="page-header"><div class="badge">5</div><h2>ตัวอย่างการใช้ Kata Nama ในประโยค</h2></div>
+      <div class="content-body">
+        <div class="example-box">✏️ <b>Murid membaca buku.</b><br><span style="color:#8a7f6b;">Murid = นักเรียน (คำนาม), buku = หนังสือ (คำนาม)</span></div>
+        <div class="example-box">✏️ <b>Fatimah pergi ke sekolah.</b><br><span style="color:#8a7f6b;">Fatimah = คำนามเฉพาะ, sekolah = คำนามทั่วไป</span></div>
+        <div class="example-box">✏️ <b>Kebahagiaan sangat penting dalam kehidupan.</b><br><span style="color:#8a7f6b;">Kebahagiaan = ความสุข เป็นคำนามนามธรรม</span></div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('activity1')">ไปทำกิจกรรมตอนที่ 1 →</button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 1 -->
+    <section class="screen" id="screen-activity1">
+      <div class="page-header"><div class="badge">6</div><h2>กิจกรรมแบบโต้ตอบ — ตอนที่ 1 (10 ข้อ)</h2></div>
+      <div class="activity-intro">คำชี้แจง: เลือกคำตอบที่ถูกต้อง แล้วตรวจ Feedback ได้ทันทีใต้คำถามแต่ละข้อ</div>
+      <div id="quiz1Holder"></div>
+      <div class="score-bar">
+        <span class="label">คะแนนของคุณ</span>
+        <span class="count"><span id="score1">0</span>/10</span>
+      </div>
+      <div class="celebrate" id="celebrate1">🎉 เก่งมาก! ตอบถูกครบทุกข้อในตอนที่ 1 แล้ว!</div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('activity2')">ไปทำกิจกรรมตอนที่ 2 →</button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 2 -->
+    <section class="screen" id="screen-activity2">
+      <div class="page-header"><div class="badge">7</div><h2>แบบฝึกหัดเติมคำ — ตอนที่ 2 (10 ข้อ)</h2></div>
+      <div class="activity-intro">คำชี้แจง: แตะคำที่เหมาะสมเพื่อเติมลงในช่องว่าง แล้วตรวจ Feedback ได้ทันที</div>
+      <div id="quiz2Holder"></div>
+      <div class="score-bar">
+        <span class="label">คะแนนของคุณ</span>
+        <span class="count"><span id="score2">0</span>/10</span>
+      </div>
+      <div class="celebrate" id="celebrate2">🎉 Tahniah! เติมคำถูกครบทุกข้อในตอนที่ 2 แล้ว!</div>
+      <div class="nav-row">
+        <button class="nav-btn ghost" onclick="goTo('toc')">← สารบัญ</button>
+        <button class="nav-btn primary" onclick="goTo('finish')">สรุปผลการเรียน →</button>
+      </div>
+    </section>
+
+    <!-- FINISH -->
+    <section class="screen" id="screen-finish">
+      <div class="finish-wrap">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#DFF5E1"/><path d="M8 12.5l2.7 2.7L16.5 9" stroke="#1F7A3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>“Kenali Kata Nama, kuasai Bahasa Melayu!”</h2>
+        <p>สรุปท้ายบทเรียน — Kata Nama Am (คำนามทั่วไป), Kata Nama Khas (คำนามเฉพาะ), Kata Nama Abstrak (คำนามนามธรรม)</p>
+        <div class="tip-box" style="text-align:left; max-width:480px; margin-left:auto; margin-right:auto;">
+          🧠 เทคนิคจำง่าย: คน + สัตว์ + สิ่งของ + สถานที่ + ความคิด/ความรู้สึก = Kata Nama
+        </div>
+        <div style="margin-top:26px;">
+          <button class="nav-btn primary" onclick="goTo('toc')">กลับไปทบทวนที่สารบัญ</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const sections = [
+  { id:'topic1', label:'หัวข้อ 1', name:'ความหมายของคำนาม', icon:'book' },
+  { id:'topic2', label:'หัวข้อ 2', name:'ประเภทของคำนาม', icon:'tag' },
+  { id:'topic3', label:'หัวข้อ 3', name:'คำนามทั่วไป/เฉพาะ', icon:'people' },
+  { id:'topic4', label:'หัวข้อ 4', name:'รูปธรรม/นามธรรม', icon:'cube' },
+  { id:'topic5', label:'หัวข้อ 5', name:'ตัวอย่างในประโยค', icon:'chat' },
+  { id:'activity1', label:'ตอนที่ 1', name:'กิจกรรมโต้ตอบ 10 ข้อ', icon:'quiz' },
+  { id:'activity2', label:'ตอนที่ 2', name:'เติมคำ 10 ข้อ', icon:'pencil' },
+];
+
+const icons = {
+  book:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  tag:'<svg viewBox="0 0 24 24" fill="none"><path d="M11.5 4H5.5A1.5 1.5 0 0 0 4 5.5v6L13 20.5l7-7L11.5 4Z" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.3" fill="#2F5233"/></svg>',
+  people:'<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="2.6" stroke="#2F5233" stroke-width="1.5"/><circle cx="17" cy="9" r="2.1" stroke="#2F5233" stroke-width="1.5"/><path d="M3.5 19c.6-3 2.7-4.6 5.5-4.6s4.9 1.6 5.5 4.6" stroke="#2F5233" stroke-width="1.5" stroke-linecap="round"/><path d="M14.5 14.7c2.3.2 3.9 1.7 4.4 4.3" stroke="#2F5233" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  cube:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3Z" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 7.5 12 12l8-4.5M12 12v9" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  chat:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-4 4v-4H6.5A2.5 2.5 0 0 1 4 13.5v-7Z" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2F5233" stroke-width="1.5"/><path d="M9.5 9.3c.3-1.2 1.3-2 2.6-2 1.4 0 2.5.9 2.5 2.1 0 1.6-2.3 1.7-2.3 3.4" stroke="#2F5233" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="16.3" r="1" fill="#2F5233"/></svg>',
+  pencil:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 20l.8-3.6L15.6 5.6a1.7 1.7 0 0 1 2.4 0l0 0a1.7 1.7 0 0 1 0 2.4L7.2 18.8 4 20Z" stroke="#2F5233" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.8 7.4l2.8 2.8" stroke="#2F5233" stroke-width="1.5"/></svg>',
+};
+
+const quiz1 = [
+  { q:"ข้อใดเป็นคำนาม?", opts:["makan","cantik","buku","berlari"], correctIdx:2,
+    ok:"ถูกต้อง! buku หมายถึง “หนังสือ” เป็นคำนาม เพราะเป็นชื่อของสิ่งของ",
+    no:"ลองสังเกตว่าคำใดเป็นชื่อของคน สัตว์ สิ่งของ หรือสถานที่" },
+  { q:"ข้อใดเป็น Kata Nama Khas?", opts:["guru","sekolah","Ahmad","murid"], correctIdx:2,
+    ok:"ถูกต้อง! Ahmad เป็นชื่อเฉพาะของบุคคล จึงเป็น Kata Nama Khas",
+    no:"Kata Nama Khas ใช้เรียกชื่อเฉพาะของบุคคล สถานที่ หรือสิ่งต่าง ๆ" },
+  { q:"คำว่า “kucing” หมายถึงอะไร?", opts:["สุนัข","แมว","นก","ปลา"], correctIdx:1,
+    ok:"kucing = แมว และเป็น Kata Nama Am",
+    no:"ลองทบทวนคำศัพท์เกี่ยวกับสัตว์" },
+  { q:"คำใดเป็นคำนามเฉพาะ?", opts:["negara","bandar","Thailand","sekolah"], correctIdx:2,
+    ok:"Thailand เป็นชื่อเฉพาะของประเทศ จึงเป็น Kata Nama Khas",
+    no:"คำนามเฉพาะมักเขียนขึ้นต้นด้วยตัวอักษรพิมพ์ใหญ่" },
+  { q:"คำว่า “kebahagiaan” เป็นคำนามประเภทใด?", opts:["Kata Nama Khas","Kata Nama Am","Kata Nama Abstrak","Kata Kerja"], correctIdx:2,
+    ok:"kebahagiaan หมายถึง “ความสุข” เป็นสิ่งที่จับต้องไม่ได้ จึงเป็นคำนามนามธรรม",
+    no:"คำนามนามธรรมใช้เรียกความรู้สึก ความคิด หรือคุณลักษณะที่จับต้องไม่ได้" },
+  { q:"ข้อใดมีคำนาม 2 คำ?", opts:["makan cepat","buku sekolah","sangat cantik","sedang berlari"], correctIdx:1,
+    ok:"buku และ sekolah เป็นคำนามทั้งคู่",
+    no:"มองหาคำที่เป็นชื่อสิ่งของหรือสถานที่" },
+  { q:"ข้อใดเป็น Kata Nama Am?", opts:["Ahmad","Malaysia","Yala","guru"], correctIdx:3,
+    ok:"guru หมายถึง “ครู” โดยทั่วไป จึงเป็น Kata Nama Am",
+    no:"ถ้าเป็นชื่อทั่วไป ไม่ใช่ชื่อเฉพาะ มักเป็น Kata Nama Am" },
+  { q:"“Masjid” หมายถึงอะไร?", opts:["โรงเรียน","มัสยิด","ตลาด","บ้าน"], correctIdx:1,
+    ok:"masjid = มัสยิด และเป็น Kata Nama Am",
+    no:"ลองเชื่อมโยงคำศัพท์กับสถานที่" },
+  { q:"ข้อใดเป็น Kata Nama Abstrak?", opts:["meja","kerusi","keberanian","buku"], correctIdx:2,
+    ok:"keberanian หมายถึง “ความกล้าหาญ” เป็นสิ่งที่จับต้องไม่ได้",
+    no:"คำนามนามธรรมมักเกี่ยวกับความรู้สึก ความคิด หรือคุณลักษณะ" },
+  { q:"ในประโยค “Ali membaca buku.” คำใดเป็นคำนาม?", opts:["membaca","Ali","membaca buku","ถูกทั้ง Ali และ buku"], correctIdx:3,
+    ok:"Ali เป็นคำนามเฉพาะ และ buku เป็นคำนามทั่วไป ส่วน membaca เป็นคำกริยา",
+    no:"แยกคำตามหน้าที่: Ali/buku = คำนาม, membaca = คำกริยา" },
+];
+
+const quiz2 = [
+  { pre:"Ali membaca", post:"di dalam kelas.", opts:["buku","makan","tidur"], correctIdx:0, fb:"เยี่ยมมาก! buku หมายถึงหนังสือ ซึ่งเป็นคำนาม" },
+  { pre:"", post:"mengajar murid.", opts:["Guru","Berlari","Cantik"], correctIdx:0, fb:"ถูกต้อง! guru = ครู เป็น Kata Nama Am" },
+  { pre:"", post:"ialah sebuah negara di Asia Tenggara.", opts:["Malaysia","makan","besar"], correctIdx:0, fb:"เก่งมาก! Malaysia เป็นชื่อเฉพาะของประเทศ จึงเป็น Kata Nama Khas" },
+  { pre:"Saya pergi ke", post:"setiap pagi.", opts:["sekolah","membaca","cantik"], correctIdx:0, fb:"ถูกต้อง! sekolah = โรงเรียน เป็นคำนาม" },
+  { pre:"", post:"sedang tidur di bawah meja.", opts:["Kucing","Berlari","Cepat"], correctIdx:0, fb:"เยี่ยม! kucing = แมว เป็น Kata Nama Am" },
+  { pre:"", post:"pergi ke Yala.", opts:["Fatimah","makan","berjalan"], correctIdx:0, fb:"ถูกต้อง! Fatimah เป็นชื่อเฉพาะของบุคคล" },
+  { pre:"Saya duduk di atas", post:".", opts:["kerusi","makan","cantik"], correctIdx:0, fb:"เก่งมาก! kerusi = เก้าอี้ เป็นคำนามรูปธรรม" },
+  { pre:"", post:"sangat penting dalam kehidupan.", opts:["Kebahagiaan","Berlari","Membaca"], correctIdx:0, fb:"ถูกต้อง! kebahagiaan = ความสุข เป็นคำนามนามธรรม" },
+  { pre:"Ibu membeli", post:"di pasar.", opts:["ikan","berjalan","cantik"], correctIdx:0, fb:"เยี่ยมมาก! ikan = ปลา เป็นคำนาม" },
+  { pre:"", post:"tinggal di Thailand.", opts:["Ahmad","Tidur","Berlari"], correctIdx:0, fb:"ถูกต้อง! Ahmad เป็นชื่อเฉพาะของบุคคล จึงเป็น Kata Nama Khas" },
+];
+
+/* ---------------- STATE ---------------- */
+const visited = new Set();
+const answers1 = {};
+const answers2 = {};
+const letters = ["A","B","C","D"];
+
+/* ---------------- RENDER TOC ---------------- */
+function renderTOC(){
+  const holder = document.getElementById('tocPath');
+  holder.innerHTML = '';
+  sections.forEach(s=>{
+    const done = visited.has(s.id);
+    const card = document.createElement('button');
+    card.className = 'toc-card';
+    card.setAttribute('aria-label', s.name);
+    card.onclick = ()=>goTo(s.id);
+    card.innerHTML = `
+      <div class="toc-icon">${icons[s.icon]}</div>
+      <div class="toc-text">
+        <div class="toc-label">${s.label}</div>
+        <div class="toc-name">${s.name}</div>
+      </div>
+      <div class="toc-check ${done?'done':''}">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    `;
+    holder.appendChild(card);
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const pct = Math.round((visited.size / sections.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+/* ---------------- NAVIGATION ---------------- */
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  const showChrome = id !== 'cover';
+  document.getElementById('topbar').style.display = showChrome ? 'flex' : 'none';
+  document.getElementById('progressTrack').style.display = showChrome ? 'block' : 'none';
+  if (id !== 'toc' && id !== 'cover' && id !== 'finish'){
+    visited.add(id);
+  }
+  if (id === 'toc') renderTOC();
+  window.scrollTo({top:0, behavior:'instant'});
+  document.querySelector('.stage').scrollIntoView({block:'start', behavior:'instant'});
+}
+
+/* ---------------- QUIZ 1 RENDER ---------------- */
+function renderQuiz1(){
+  const holder = document.getElementById('quiz1Holder');
+  holder.innerHTML = '';
+  quiz1.forEach((item, qi)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    const optsHtml = item.opts.map((opt,oi)=>`<button class="opt-btn" data-qi="${qi}" data-oi="${oi}" onclick="answerQ1(${qi},${oi})">${letters[oi]}. ${opt}</button>`).join('');
+    card.innerHTML = `
+      <div class="q-top"><div class="q-num">${qi+1}</div><div class="q-text">${item.q}</div></div>
+      <div class="opt-grid" id="q1-opts-${qi}">${optsHtml}</div>
+      <div class="fb-panel" id="q1-fb-${qi}"></div>
+    `;
+    holder.appendChild(card);
+  });
+}
+
+function answerQ1(qi, oi){
+  const item = quiz1[qi];
+  answers1[qi] = oi;
+  const optsWrap = document.getElementById('q1-opts-'+qi);
+  [...optsWrap.children].forEach((btn,i)=>{
+    btn.classList.remove('chosen-correct','chosen-wrong','reveal-correct');
+    if (i === oi){
+      btn.classList.add(i===item.correctIdx ? 'chosen-correct' : 'chosen-wrong');
+    }
+    if (i === item.correctIdx && oi !== item.correctIdx){
+      btn.classList.add('reveal-correct');
+    }
+  });
+  const fb = document.getElementById('q1-fb-'+qi);
+  const isCorrect = oi === item.correctIdx;
+  fb.className = 'fb-panel show ' + (isCorrect ? 'ok':'no');
+  fb.innerHTML = isCorrect
+    ? `<b>🟢 เฉลย: ${letters[item.correctIdx]}. ${item.opts[item.correctIdx]}</b>${item.ok}`
+    : `<b>🔴 ยังไม่ถูก ลองใหม่อีกครั้ง</b>${item.no}`;
+  updateScore1();
+}
+
+function updateScore1(){
+  let score = 0;
+  quiz1.forEach((item,qi)=>{ if (answers1[qi] === item.correctIdx) score++; });
+  document.getElementById('score1').textContent = score;
+  document.getElementById('celebrate1').classList.toggle('show', score === quiz1.length);
+}
+
+/* ---------------- QUIZ 2 RENDER ---------------- */
+function renderQuiz2(){
+  const holder = document.getElementById('quiz2Holder');
+  holder.innerHTML = '';
+  quiz2.forEach((item, qi)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    const optsHtml = item.opts.map((opt,oi)=>`<button class="chip-btn" data-qi="${qi}" data-oi="${oi}" onclick="answerQ2(${qi},${oi})">${opt}</button>`).join('');
+    card.innerHTML = `
+      <div class="q-top"><div class="q-num">${qi+1}</div>
+        <div class="q-text" style="flex:1;">
+          <div class="sentence-line">${item.pre} <span class="blank" id="q2-blank-${qi}">________</span> ${item.post}</div>
+          <div class="chip-row" id="q2-opts-${qi}">${optsHtml}</div>
+        </div>
+      </div>
+      <div class="fb-panel" id="q2-fb-${qi}"></div>
+    `;
+    holder.appendChild(card);
+  });
+}
+
+function answerQ2(qi, oi){
+  const item = quiz2[qi];
+  answers2[qi] = oi;
+  const optsWrap = document.getElementById('q2-opts-'+qi);
+  [...optsWrap.children].forEach((btn,i)=>{
+    btn.classList.remove('chosen-correct','chosen-wrong');
+    if (i === oi) btn.classList.add(i===item.correctIdx ? 'chosen-correct':'chosen-wrong');
+  });
+  const isCorrect = oi === item.correctIdx;
+  document.getElementById('q2-blank-'+qi).textContent = item.opts[oi];
+  const fb = document.getElementById('q2-fb-'+qi);
+  fb.className = 'fb-panel show ' + (isCorrect ? 'ok':'no');
+  fb.innerHTML = isCorrect
+    ? `<b>🟢 ถูกต้อง!</b>${item.fb}`
+    : `<b>🔴 ยังไม่ถูก</b>คำที่ถูกต้องคือ “${item.opts[item.correctIdx]}” — ${item.fb}`;
+  updateScore2();
+}
+
+function updateScore2(){
+  let score = 0;
+  quiz2.forEach((item,qi)=>{ if (answers2[qi] === item.correctIdx) score++; });
+  document.getElementById('score2').textContent = score;
+  document.getElementById('celebrate2').classList.toggle('show', score === quiz2.length);
+}
+
+/* ---------------- INIT ---------------- */
+renderTOC();
+renderQuiz1();
+renderQuiz2();
+</script>
+</body>
+</html>
